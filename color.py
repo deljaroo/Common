@@ -1,4 +1,22 @@
 class Color:
+    def colorKeyToTransparent(image_path, color_key):
+        from PIL import Image
+        with Image.open(image_path) as old_image:
+            #old_image = Image.open(image_path)
+            old_pixel_map = old_image.load()
+            new_image = Image.new(old_image.mode, old_image.size)
+            new_pixel_map = new_image.load()
+            for i in range(new_image.size[0]):
+                for j in range(new_image.size[1]):
+                    old_color = old_pixel_map[i,j]
+                    if old_color==color_key:
+                        new_pixel_map[i, j] = (0, 0, 0, 255)
+                    else:
+                        new_pixel_map[i, j] = old_pixel_map[i, j]
+            old_filename = image_path[image_path.rfind('\\')+1:]
+            new_image.save("tkid_" + old_filename)
+            new_image.close()
+
     def svhToRgb(sat, value, hue):
         """
         Converts SVH color wheel to RGB color
